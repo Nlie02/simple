@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Gift! 💖</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #ffe6f2;
+            color: #ff4d79;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        /* Floating Container (2x2 grid for pictures & video) */
+        .floating-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        /* Images & Video */
+        .floating-picture, video {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            border-radius: 10px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 24px;
+            animation: bounce 1.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #ff4d79;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Centering buttons in a row */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Emoji Animations */
+        .emoji {
+            font-size: 50px;
+            animation: pop 0.6s ease-in-out forwards;
+            display: none;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.2); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Hide quiz and final sections initially */
+        #quiz, #finalPage, #contractPage, #waitPage {
+            display: none;
+        }
+
+        /* Heart reaction messages */
+        #correctEmoji {
+            color: #ff4d79;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #wrongEmoji {
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Hide audio player */
+        audio {
+            display: none;
+        }
+
+        /* Fingerprint effect */
+        .fingerprint {
+            width: 100px;
+            height: 100px;
+            background: url('fingerprint.png') no-repeat center center;
+            background-size: contain;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        /* Contract message */
+        #contractMessage {
+            font-size: 18px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: fixed;
+            font-size: 50px;
+            animation: heartPop 0.6s ease-in-out forwards;
+            z-index: 1000; /* Ensure it appears above other elements */
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* GIFs for correct and wrong answers */
+        #correctGif, #wrongGif {
+            display: none;
+            width: 100px; /* Adjust size as needed */
+            margin-top: 10px;
+        }
+
+        /* Funny Animation */
+        .funny-animation {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .dancing-character {
+            width: 150px; /* Adjust size as needed */
+            animation: dance 1s infinite alternate;
+        }
+
+        @keyframes dance {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .funny-message {
+            font-size: 24px;
+            color: #ff4d79;
+            margin-top: 10px;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Carousel Styles */
+        .carousel {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+        }
+
+        .carousel-images {
+            display: flex;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-images > * {
+            display: none; /* Hide all slides initially */
+            width: 100%;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 77, 121, 0.8);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 10;
+        }
+
+        #prevButton {
+            left: 10px;
+        }
+
+        #nextButton {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Page -->
+    <div id="intro" class="container" style="display: block;">
+        <h1>Welcome to our Homepage Love! 💖</h1>
+        <p>Before we celebrate, let’s see how well you know me! 😘</p>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Section -->
+    <div id="quiz" class="container">
+        <h1>Quiz Time! 🥰</h1>
+        <p>Answer these questions correctly to proceed!</p>
+
+        <div id="questionContainer"></div>
+
+        <!-- Correct / Wrong message -->
+        <p id="correctEmoji" class="emoji">💖 Yay! Ang pogi mo tlga love! Pasapak nga! 💖</p>
+        <p id="wrongEmoji" class="emoji">😭 Mali love haysstt. 😡</p>
+
+        <!-- GIFs for correct and wrong answers -->
+        <img id="correctGif" src="correct.gif" alt="Correct!" />
+        <img id="wrongGif" src="wrong.gif" alt="Wrong!" />
+    </div>
+
+    <!-- Love Contract Page -->
+    <div id="contractPage" class="container">
+        <h1>Love Contract 💍</h1>
+        <p>To show our commitment to each other, please accept this love contract.</p>
+        <div class="fingerprint" onclick="acceptContract()"></div>
+        <p id="contractMessage">💖 Don't break this contract or else I will kill you! 💖</p>
+    </div>
+
+    <!-- Wait Page -->
+    <div id="waitPage" class="container">
+        <h1>Please Wait...</h1>
+        <p>You will be redirected to the surprise page in <span id="countdown">5</span> seconds.</p>
+    </div>
+
+    <!-- Final Page -->
+    <div id="finalPage" class="container">
+        <h1>🎉 Yay! You Passed! Happy 6th MONTHSARY! labidabskurttyy.. 💖</h1>
+        <p>Click the heart to play a song! 😘</p>
+        <button class="heart-button" onclick="playMusic()">❤️</button>
+
+        <!-- Carousel Container -->
+        <div class="carousel">
+            <div class="carousel-images">
+                <img src="1.jpg" alt="Our Picture" class="floating-picture">
+                <img src="8.jpg" alt="Our Picture" class="floating-picture">
+                <img src="9.jpg" alt="Our Picture" class="floating-picture">
+                <video controls>
+                    <source src="5.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <button class="carousel-button" id="prevButton" onclick="changeSlide(-1)">❮</button>
+            <button class="carousel-button" id="nextButton" onclick="changeSlide(1)">❯</button>
+            <p> (Please slide this image to see your cute gf ..)</p>
+        </div>
+
+        <!-- Funny Animation -->
+        <div class="funny-animation">
+            <img src="10.gif" alt="Dancing Character" class="dancing-character">
+            <img src="NewIvory.jpg" alt="Dancing Character" class="dancing-character">
+            <p class="funny-message">Surprise! We did it !! wahhh hahahhaha  🎉</p>
+        </div>
+
+        <!-- Music -->
+        <audio id="backgroundMusic">
+            <source src="6.mp3" type="audio/mp3">
+        </audio>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const questions = [
+            { question: "What is my favorite food?", choices: ["Chicken", "Vegetables"], correct: "Chicken" },
+            { question: "Am I emotional?", choices: ["Yes", "No"], correct: "Yes" },
+            { question: "What is my favorite drink?", choices: ["Dutchmill", "Coffee"], correct: "Dutchmill" },
+            { question: "How many months have we been together?", choices: ["2 Months", "6 Months"], correct: "6 Months" },
+            { question: "When is our monthsary?", choices: ["Today", "Tomorrow"], correct: "Today" },
+            { question: "Do you want to grow old with me?", choices: ["Yes", "No"], correct: "Yes" } // Last question
+        ];
+
+        function startQuiz() {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("quiz").style.display = "block";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const qContainer = document.getElementById("questionContainer");
+            qContainer.innerHTML = `<h2>${questions[currentQuestion].question}</h2>`;
+
+            const buttonContainer = document.createElement("div");
+            buttonContainer.classList.add("button-container");
+
+            questions[currentQuestion].choices.forEach(choice => {
+                const button = document.createElement("button");
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(choice);
+                buttonContainer.appendChild(button);
+            });
+
+            qContainer.appendChild(buttonContainer);
+
+            // Hide previous emoji reactions and GIFs
+            document.getElementById("correctEmoji").style.display = "none";
+            document.getElementById("wrongEmoji").style.display = "none";
+            document.getElementById("correctGif").style.display = "none";
+            document.getElementById("wrongGif").style.display = "none";
+        }
+
+        function checkAnswer(choice) {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+            document.body.appendChild(heart);
+            heart.style.left = Math.random() * window.innerWidth + 'px'; // Random horizontal position
+            heart.style.top = Math.random() * window.innerHeight + 'px'; // Random vertical position
+
+            if (choice === questions[currentQuestion].correct) {
+                document.getElementById("correctEmoji").style.display = "block";
+                document.getElementById("correctGif").style.display = "block"; // Show correct GIF
+                heart.style.display = "block"; // Show heart
+                heartAnimation();
+
+                setTimeout(() => {
+                    heart.style.display = "none"; // Hide heart after animation
+                    document.getElementById("correctGif").style.display = "none"; // Hide correct GIF
+                    currentQuestion++;
+                    if (currentQuestion < questions.length) {
+                        showQuestion();
+                    } else {
+                        document.getElementById("quiz").style.display = "none";
+                        document.getElementById("contractPage").style.display = "block"; // Show contract page
+                    }
+                }, 1500);
+            } else {
+                document.getElementById("wrongEmoji").style.display = "block";
+                document.getElementById("wrongGif").style.display = "block"; // Show wrong GIF
+
+                setTimeout(() => {
+                    document.getElementById("wrongGif").style.display = "none"; // Hide wrong GIF
+                }, 3000);
+            }
+        }
+
+        function heartAnimation() {
+            const heart = document.querySelector(".heart");
+            heart.style.display = "block"; // Show heart
+            heart.style.left = Math.random() * window.innerWidth + 'px'; // Random horizontal position
+            heart.style.top = Math.random() * window.innerHeight + 'px'; // Random vertical position
+            heart.classList.add("heart");
+            setTimeout(() => {
+                heart.remove(); // Remove heart after animation
+            }, 600);
+        }
+
+        function acceptContract() {
+            document.getElementById("contractMessage").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("contractPage").style.display = "none";
+                document.getElementById("waitPage").style.display = "block";
+                startCountdown();
+            }, 1000);
+        }
+
+        function startCountdown() {
+            let countdown = 5;
+            const countdownElement = document.getElementById("countdown");
+            const interval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    document.getElementById("waitPage").style.display = "none";
+                    document.getElementById("finalPage").style.display = "block";
+                    playMusic();
+                }
+            }, 1000);
+        }
+
+        function playMusic() {
+            const music = document.getElementById("backgroundMusic");
+            music.play();
+        }
+
+        // Carousel functionality
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.carousel-images > *');
+            if (index >= slides.length) {
+                currentSlide = 0; // Loop back to the first slide
+            } else if (index < 0) {
+                currentSlide = slides.length - 1; // Loop back to the last slide
+            } else {
+                currentSlide = index;
+            }
+
+            slides.forEach((slide, i) => {
+                slide.style.display = (i === currentSlide) ? 'block' : 'none';
+            });
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Initialize the carousel
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
