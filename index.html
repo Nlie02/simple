@@ -271,7 +271,10 @@
     <div id="finalPage" class="container">
         <h1>🎉 Yay! You Passed! Happy 6th MONTHSARY! labidabskurttyy.. 💖</h1>
         <p>Click the heart to play a song! 😘</p>
-        <button class="heart-button" onclick="playMusic()">❤️</button>
+        
+        <!-- Separate heart buttons for different music -->
+        <button class="heart-button" onclick="playMusic('main')">❤️ Play Main Music</button>
+        <button class="heart-button" onclick="playMusic('glue')">❤️ Play Glue Music</button>
 
         <!-- Carousel Container -->
         <div class="carousel">
@@ -279,8 +282,28 @@
                 <img src="1.jpg" alt="Our Picture" class="floating-picture">
                 <img src="8.jpg" alt="Our Picture" class="floating-picture">
                 <img src="9.jpg" alt="Our Picture" class="floating-picture">
+                <img src="11.jpg" alt="Our Picture" class="floating-picture">
+                <img src="12.jpg" alt="Our Picture" class="floating-picture">
+                <img src="13.jpg" alt="Our Picture" class="floating-picture">
+                <img src="14.jpg" alt="Our Picture" class="floating-picture">
+                <img src="15.jpg" alt="Our Picture" class="floating-picture">
+                <img src="16.jpg" alt="Our Picture" class="floating-picture">
+                <img src="17.jpg" alt="Our Picture" class="floating-picture">
+                <img src="18.jpg" alt="Our Picture" class="floating-picture">
+                <img src="19.jpg" alt="Our Picture" class="floating-picture">
+                <img src="20.jpg" alt="Our Picture" class="floating-picture">
+                <img src="21.jpg" alt="Our Picture" class="floating-picture">
+                <img src="22.jpg" alt="Our Picture" class="floating-picture">
+                <img src="23.jpg" alt="Our Picture" class="floating-picture">
+                <img src="24.jpg" alt="Our Picture" class="floating-picture">
+                <img src="25.jpg" alt="Our Picture" class="floating-picture">
                 <video controls>
                     <source src="5.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                <video controls>
+                    <source src="45.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -291,14 +314,17 @@
 
         <!-- Funny Animation -->
         <div class="funny-animation">
-            <img src="10.gif" alt="Dancing Character" class="dancing-character">
+            <img src="play.gif" alt="Dancing Character" class="dancing-character">
             <img src="NewIvory.jpg" alt="Dancing Character" class="dancing-character">
             <p class="funny-message">Surprise! We did it !! wahhh hahahhaha  🎉</p>
         </div>
 
         <!-- Music -->
-        <audio id="backgroundMusic">
+        <audio id="mainMusic">
             <source src="6.mp3" type="audio/mp3">
+        </audio>
+        <audio id="glueMusic">
+            <source src="glue.mp3" type="audio/mp3">
         </audio>
     </div>
 
@@ -407,14 +433,23 @@
                     clearInterval(interval);
                     document.getElementById("waitPage").style.display = "none";
                     document.getElementById("finalPage").style.display = "block";
-                    playMusic();
                 }
             }, 1000);
         }
 
-        function playMusic() {
-            const music = document.getElementById("backgroundMusic");
-            music.play();
+        function playMusic(type) {
+            const mainMusic = document.getElementById("mainMusic");
+            const glueMusic = document.getElementById("glueMusic");
+
+            if (type === 'main') {
+                mainMusic.currentTime = 0; // Reset to start
+                mainMusic.play();
+                glueMusic.pause(); // Pause glue music if playing
+            } else if (type === 'glue') {
+                glueMusic.currentTime = 0; // Reset to start
+                glueMusic.play();
+                mainMusic.pause(); // Pause main music if playing
+            }
         }
 
         // Carousel functionality
